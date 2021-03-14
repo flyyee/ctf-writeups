@@ -81,6 +81,7 @@ storage.bucket("fred_chkn").file("secret.txt").createReadStream()
 ```
 
 [Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/app.js) (not cleaned up)
+
 Opening “log.txt” locally, I obtained the flag!
 
 ![flag.png](https://raw.githubusercontent.com/flyyee/ctf-writeups/master/whitehacks21/imgs/flag.png)
