@@ -2,12 +2,16 @@ Category: GovTech (Misc)
 
 Flag: WH2021{ea$y_Cl0uD_Ch@ll3ng3}
 
+
+
 Steps:
 
 Challenge Description
 
 Fred Chee Hong Kat, a developer for Bug Bug Dev Ptd. Ltd, is a disgruntled employee with poor security hygiene! He has been flagged multiple times for poor password practices! Now, it finally hits him! Our threat intelligence feed discovered a set of leaked credentials available on the Dark Web. Can you help us investigate the matter? We need to know if our company's secrets are compromised!
-_Attached is the file [creds.json]()_
+_Attached is the file [creds.json](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/creds.json)_
+
+
 
 Opening creds.json, we see that it contains
 
@@ -17,7 +21,7 @@ Looks like a file containing **cred**entials for some service. Let’s google! G
 
 Here’s what I’m thinking so far. We need to authorize ourselves using the credentials to use the Google Cloud service account to access a flag stored on Google Cloud Storage. So, to find out how to use the credentials for Google Cloud Storage, we look up [documentation](https://cloud.google.com/storage/docs/reference/libraries) for the service.
 
-Since I am most familiar with Node.JS and already had it installed on my machine, I chose to implement my solution in Node.JS. Following the instructions on the page, I first installed the library with  ```npm install --save @google-cloud/storage```. Then I tried using the example they provided 
+Since I am most familiar with Node.JS and already had it installed on my machine, I chose to implement my solution in Node.JS. Following the instructions on the page, I first installed the library with  ```npm install --save @google-cloud/storage```. Then I tried using the [example](https://cloud.google.com/storage/docs/reference/libraries#using_the_client_library) provided together with intializing "storage" [in this fashion](https://googleapis.dev/nodejs/storage/latest/Storage.html) 
 
 ```// Imports the Google Cloud client libraryconst {Storage} = require('@google-cloud/storage');
 // Imports the Google Cloud client library
@@ -26,7 +30,7 @@ const {Storage} = require('@google-cloud/storage');
 // Creates a client
 const storage = new Storage();
 // Creates a client from a Google service account key.
-// const storage = new Storage({keyFilename: "key.json"});
+// const storage = new Storage({projectId: 'your-project-id', keyFilename: "key.json"});
 // For more information on ways to initialize Storage, please see https://googleapis.dev/nodejs/storage/latest/Storage.html
 
 /**
@@ -43,7 +47,7 @@ async function createBucket() {
 createBucket().catch(console.error);
 ```
 
-I replaced "key.json" with creds.json. It works, however, Node.JS returns an error message that we do not have sufficient privileges to create a bucket. That makes sense, since the creator of the challenge wouldn’t want the Service account to have high privileges. Anyways, the flag is something that would likely already be on the cloud, and only require us to read it.
+I replaced "your-project-id" with "whitehacks-csg-2021" (from creds.json), and "key.json" with "creds.json". It works, however, Node.JS returns an error message that we do not have sufficient privileges to create a bucket. That makes sense, since the creator of the challenge wouldn’t want the Service account to have high privileges. Anyways, the flag is something that would likely already be on the cloud, and only require us to read it.
 
 Now, I’d never used Google Cloud Storage before this, so I wasn’t sure where the flag could be stored. I decided to take a look at the [SDK Client Reference](https://googleapis.dev/nodejs/storage/latest/). Browsing the left sidebar, I tried looking out for any methods that would let me *get* something. Looking at the definition for "[File.get](https://googleapis.dev/nodejs/storage/latest/File.html#get-examples)", I noticed that the file was created by specifying a name of a file to a Bucket object. Once again, looking at the documentation for buckets, "[Bucket.getFiles](https://googleapis.dev/nodejs/storage/latest/Bucket.html#getFiles)" would return me the filenames of the files in a bucket. I would likely find a “flag.txt” there. However, the next thing I would have to do is [initialise the bucket](https://googleapis.dev/nodejs/storage/latest/Bucket.html#Bucket-examples), and I needed to pass its name. Looking under the sidebar again, I found the "[storage.getBuckets](https://googleapis.dev/nodejs/storage/latest/Storage.html#getBuckets)" method. 
 I implemented the code
@@ -83,7 +87,7 @@ Opening “log.txt” locally, I obtained the flag!
 
 ![image-20210314232233403](C:\Users\Gerrard Tai\AppData\Roaming\Typora\typora-user-images\image-20210314232233403.png)
 
-[Final code]()
+[Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/app.js) (not cleaned up)
 
 _First solve asia btw_
 ~flyyee
