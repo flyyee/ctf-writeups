@@ -1,21 +1,19 @@
-Category: GovTech (Misc)
+# Category: GovTech (Misc)
 
-Flag: WH2021{ea$y_Cl0uD_Ch@ll3ng3}
+## Flag: WH2021{ea$y_Cl0uD_Ch@ll3ng3}
 
 
 
-Steps:
-
-Challenge Description
+### Challenge Description
 
 Fred Chee Hong Kat, a developer for Bug Bug Dev Ptd. Ltd, is a disgruntled employee with poor security hygiene! He has been flagged multiple times for poor password practices! Now, it finally hits him! Our threat intelligence feed discovered a set of leaked credentials available on the Dark Web. Can you help us investigate the matter? We need to know if our company's secrets are compromised!
 _Attached is the file [creds.json](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/creds.json)_
 
-
+## Steps:
 
 Opening creds.json, we see that it contains
 
-![image-20210314225558847](C:\Users\Gerrard Tai\AppData\Roaming\Typora\typora-user-images\image-20210314225558847.png)
+![creds.png](https://raw.githubusercontent.com/flyyee/ctf-writeups/master/whitehacks21/imgs/creds.png)
 
 Looks like a file containing **cred**entials for some service. Let’s google! Googling “client_x509_cert_url”, this looks to be an [account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) for a Google Cloud service account.The flag is likely stored somewhere on the account’s Google Cloud. We pick out some [Google Cloud services](https://cloud.google.com/products) that look promising and narrow the most promising service down to Cloud Storage, which reads “Object storage for companies of all sizes. Store any amount of data. Retrieve it as often as you’d like.”.
 
@@ -82,12 +80,12 @@ storage.bucket("fred_chkn").file("secret.txt").createReadStream()
     .pipe(fs.createWriteStream("log.txt"));
 ```
 
-The end result of the code was.
+[Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/app.js) (not cleaned up)
 Opening “log.txt” locally, I obtained the flag!
 
-![image-20210314232233403](C:\Users\Gerrard Tai\AppData\Roaming\Typora\typora-user-images\image-20210314232233403.png)
+![flag.png](https://raw.githubusercontent.com/flyyee/ctf-writeups/master/whitehacks21/imgs/flag.png)
 
-[Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/app.js) (not cleaned up)
+
 
 _First solve asia btw_
 ~flyyee
