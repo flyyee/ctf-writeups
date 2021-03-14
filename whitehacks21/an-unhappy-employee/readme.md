@@ -80,7 +80,7 @@ storage.bucket("fred_chkn").file("secret.txt").createReadStream()
     .pipe(fs.createWriteStream("log.txt"));
 ```
 
-[Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/an-unhappy-employee/app.js) (not cleaned up)
+[Final code](https://github.com/flyyee/ctf-writeups/blob/master/whitehacks21/an-unhappy-employee/app.js)
 
 Opening “log.txt” locally, I obtained the flag!
 
